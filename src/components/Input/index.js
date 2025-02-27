@@ -1,67 +1,55 @@
+import {View, Text, TextInput, Pressable, Image} from 'react-native';
 import {useState} from 'react';
 import {styleInput} from './style';
-import {
-  Keyboard,
-  KeyboardAvoidingView,
-  Platform,
-  TextInput,
-  TouchableWithoutFeedback,
-  View,
-  Text,
-  Pressable,
-  Image,
-} from 'react-native';
 
-const Input = ({label, password}) => {
+const Input = ({label, password, value, onChangeText, error, onBlur}) => {
   const [isFocused, setIsFocused] = useState(false);
   const [isPassWord, setIsPassWord] = useState(false);
+
   const showPass = () => {
     setIsPassWord(!isPassWord);
   };
+
   return (
-    <KeyboardAvoidingView
-      style={styleInput.containerView}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-      <TouchableWithoutFeedback
-        onPress={Keyboard.dismiss}
-        keyboardShouldPersistTaps="always">
-        <View>
-          <Text style={styleInput.label}>{label}</Text>
-          <View
-            style={[
-              styleInput.container,
-              {borderColor: isFocused ? '#1F41BB' : '#4E4B66'},
-            ]}>
-            <TextInput
-              style={styleInput.input}
-              placeholderTextColor="#626262"
-              secureTextEntry={password && !isPassWord}
-              onFocus={() => {
-                setIsFocused(true);
-                console.log('Input Focused:', isFocused);
-              }}
-              onBlur={() => {
-                setIsFocused(false);
-                console.log('Input Blurred:', isFocused);
-              }}
+    <View style={styleInput.containerView}>
+      <Text style={styleInput.label}>{label}</Text>
+      <View
+        style={[
+          styleInput.container,
+          {
+            borderColor: error
+              ? 'red' // Nếu có lỗi, viền đỏ
+              : isFocused
+              ? '#1F41BB'
+              : '#4E4B66',
+          },
+        ]}>
+        <TextInput
+          style={styleInput.input}
+          placeholderTextColor="#626262"
+          secureTextEntry={password && !isPassWord}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => {
+            setIsFocused(false);
+            if (onBlur) onBlur();
+          }}
+          value={value}
+          onChangeText={onChangeText}
+        />
+        {password && (
+          <Pressable onPress={showPass}>
+            <Image
+              style={styleInput.eye}
+              source={
+                isPassWord
+                  ? require('../../assets/eye.png')
+                  : require('../../assets/eye-close.png')
+              }
             />
-            {password ? (
-              <Pressable onPress={showPass}>
-                <Image
-                  style={styleInput.eye}
-                  source={
-                    isPassWord
-                      ? require('../../assets/eye.png')
-                      : require('../../assets/eye-close.png')
-                  }
-                />
-              </Pressable>
-            ) : null}
-          </View>
-        </View>
-      </TouchableWithoutFeedback>
-    </KeyboardAvoidingView>
+          </Pressable>
+        )}
+      </View>
+    </View>
   );
 };
-
 export default Input;

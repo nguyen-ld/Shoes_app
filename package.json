@@ -1,5 +1,5 @@
 {
-  "name": "ReactNativeProject",
+  "name": "NikeShoesStore",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -10,13 +10,20 @@
     "test": "jest"
   },
   "dependencies": {
+    "@react-native-async-storage/async-storage": "^2.1.1",
+    "@react-native-community/datetimepicker": "^4.0.1",
+    "@react-navigation/bottom-tabs": "^6.0.9",
     "@react-navigation/native": "^6.1.8",
     "@react-navigation/stack": "^6.3.18",
+    "axios": "^1.7.9",
     "react": "18.3.1",
     "react-native": "0.77.1",
     "react-native-gesture-handler": "^2.23.1",
+    "react-native-pager-view": "^6.7.0",
     "react-native-safe-area-context": "^5.2.0",
-    "react-native-screens": "^4.6.0"
+    "react-native-screens": "^4.6.0",
+    "react-native-tab-view": "^4.0.5",
+    "react-native-vector-icons": "^10.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
