@@ -14,7 +14,7 @@ export const styleLogin = StyleSheet.create({
     fontFamily: 'Poppins-ExtraBold',
   },
   titleLoginTwo: {
-    color: '#1877F2',
+    color: '#5B9EE1',
     marginTop: -20,
   },
   contentTitleLogin: {

@@ -7,6 +7,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import {styles} from './style';
 import {useState, useEffect} from 'react';
@@ -14,6 +15,7 @@ import ModelSex from '../../../components/ModalSex';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {Platform} from 'react-native';
 import {infoUser, updateInfo} from '../../../api/UserAPI';
+import Loading from '../../../components/ModalLoading';
 
 const EditProfile = ({route, navigation}) => {
   const {id} = route.params;
@@ -24,9 +26,19 @@ const EditProfile = ({route, navigation}) => {
   const [fullname, setFullname] = useState('');
   const [email, setEmail] = useState('');
   const [numberphone, setNumberphone] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const updateInfoUserById = async () => {
+    if (!fullname || !date || !sex || !numberphone || !email) {
+      Alert.alert(
+        'Change information',
+        'Please add complete information before updating',
+      );
+      return;
+    }
+
     try {
+      setLoading(true);
       const response = await updateInfo(
         id,
         fullname,
@@ -36,9 +48,11 @@ const EditProfile = ({route, navigation}) => {
         numberphone,
       );
 
-      console.log(response); // Xử lý phản hồi từ API nếu cần
+      console.log(response);
     } catch (error) {
       console.error('Có lỗi xảy ra khi cập nhật thông tin người dùng:', error);
+    } finally {
+      setLoading(false);
     }
   };
   useEffect(() => {
@@ -58,7 +72,7 @@ const EditProfile = ({route, navigation}) => {
     };
 
     fetchUserInfo();
-  }, [id]); // Chạy lại khi ID thay đổi
+  }, [id]);
   return (
     <KeyboardAvoidingView
       style={styles.container}
@@ -75,7 +89,6 @@ const EditProfile = ({route, navigation}) => {
             <Text style={styles.title}>Full name </Text>
             <TextInput
               style={styles.input}
-              placeholder="Lê Đức Nguyên"
               value={fullname}
               onChangeText={setFullname}
             />
@@ -84,7 +97,6 @@ const EditProfile = ({route, navigation}) => {
             <Text style={styles.title}>Email </Text>
             <TextInput
               style={styles.input}
-              placeholder="nguyenldpd10357@gmail.com"
               value={email}
               onChangeText={setEmail}
             />
@@ -94,7 +106,6 @@ const EditProfile = ({route, navigation}) => {
             <TextInput
               style={styles.input}
               keyboardType="numeric"
-              placeholder="0829378357"
               value={numberphone}
               onChangeText={setNumberphone}
             />
@@ -164,6 +175,7 @@ const EditProfile = ({route, navigation}) => {
               <Text style={styles.titleButton}>Update</Text>
             </TouchableOpacity>
           </View>
+          <Loading loading={loading}></Loading>
         </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>

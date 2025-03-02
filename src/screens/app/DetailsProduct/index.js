@@ -10,9 +10,10 @@ import SizeView from '../../../components/ItemSize';
 import {addToCart, getListCartByUser} from '../../../api/CartAPI';
 import Loading from '../../../components/ModalLoading';
 
-const Details = ({route, id_user}) => {
-  // console.log('params', route.params);
-  const {id_product} = route.params;
+const Details = ({route}) => {
+  const {id_product, id} = route.params;
+  console.log('ID User trong Details:', id);
+
   const [images, setImages] = useState([]);
   const [product, setProduct] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
@@ -43,6 +44,7 @@ const Details = ({route, id_user}) => {
         .finally(setLoading(false));
     }
   }, [id_product]);
+
   useEffect(() => {
     setLoading(true);
     getListSize()
@@ -63,15 +65,16 @@ const Details = ({route, id_user}) => {
         images: selectedImage,
         id_size: selectedSize,
         quantity: 1,
-        id_user: id_user,
+        id_user: id,
       });
       const data = await addToCart(
-        id_user,
+        id,
         product._id,
         selectedSize,
         1,
         selectedImage,
       );
+      console.log('data hoàn thành  : ', data);
     } catch (error) {
       console.log('Lỗi khi thêm vào giỏ hàng:', error);
     } finally {

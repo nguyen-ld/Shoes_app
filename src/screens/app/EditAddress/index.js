@@ -13,7 +13,9 @@ import {styles} from './style';
 import {addNewAddress} from '../../../api/UserAPI';
 import Loading from '../../../components/ModalLoading';
 
-const EditAddress = ({id_user}) => {
+const EditAddress = ({route}) => {
+  const {id} = route.params || null;
+  console.log('Id nhận từ address -> edit address', id);
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [city, setCity] = useState('');
@@ -51,7 +53,7 @@ const EditAddress = ({id_user}) => {
 
     try {
       setLoading(true);
-      const response = await addNewAddress(id_user._id, newAddress);
+      const response = await addNewAddress(id, newAddress);
       if (response.status === 200) {
         console.log('Thêm địa chỉ thành công ');
       } else {
@@ -89,6 +91,7 @@ const EditAddress = ({id_user}) => {
                 style={[styles.input, errors.phone && styles.inputError]}
                 value={phone}
                 onChangeText={setPhone}
+                keyboardType="numeric"
               />
               {errors.phone && (
                 <Text style={styles.errorText}>{errors.phone}</Text>

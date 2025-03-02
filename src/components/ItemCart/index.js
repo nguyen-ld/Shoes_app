@@ -103,6 +103,8 @@ const CartView = ({item, ListCart, handleToggle}) => {
             visible={visible}
             onClose={() => setVisible(false)}
             onConfirm={removeItemToList}
+            title="Xóa sản phẩm"
+            content="Bạn có muốn xóa sản phẩm này ra khỏi giỏ hàng không?"
           />
           <TouchableOpacity onPress={() => setVisible(!visible)}>
             <Image source={require('../../assets/delete.png')} />

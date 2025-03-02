@@ -9,9 +9,8 @@ import ItemProducts from '../../../components/ItemProduct';
 import {getListProductById} from '../../../api/ProductAPI';
 import Loading from '../../../components/ModalLoading';
 
-const Home = ({route}) => {
-  // const user = route.params.id_user || null;
-  // console.log(user);
+const Home = ({id_user}) => {
+  console.log('tab=>home : ', id_user);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [category, setCategorys] = useState([]);
   const [product, setProduct] = useState([]);
@@ -90,7 +89,9 @@ const Home = ({route}) => {
 
         <FlatList
           data={product}
-          renderItem={({item}) => <ItemProducts item={item} />}
+          renderItem={({item}) => (
+            <ItemProducts item={item} id_user={id_user} />
+          )}
           keyExtractor={item => item._id.toString()}
           numColumns={2}
           columnWrapperStyle={{

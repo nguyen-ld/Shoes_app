@@ -7,6 +7,7 @@ export const styleInput = StyleSheet.create({
     marginBottom: 8,
     color: '#4E4B66',
     fontSize: 14,
+    fontFamily: 'Poppins-Light',
   },
   container: {
     borderWidth: 1,
@@ -20,6 +21,7 @@ export const styleInput = StyleSheet.create({
     fontWeight: '400',
     flex: 1,
     fontSize: 14,
+    fontFamily: 'Poppins-Light',
   },
   eye: {
     width: 24,

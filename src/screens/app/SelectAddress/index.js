@@ -6,10 +6,12 @@ import DeliveryView from '../../../components/Delivery';
 import {useFocusEffect} from '@react-navigation/native';
 import {ListAddressByUser} from '../../../api/UserAPI';
 import Loading from '../../../components/ModalLoading';
-const SelectAddress = ({navigation, id_user}) => {
+const SelectAddress = ({navigation, route}) => {
   const [address, setAddress] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selected, setSelectedItem] = useState(null);
+  const {id_user} = route.params || null;
+  console.log('id nhân từ cart  ', id_user);
   useFocusEffect(
     useCallback(() => {
       setLoading(true);

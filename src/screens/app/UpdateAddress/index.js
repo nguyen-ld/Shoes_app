@@ -11,8 +11,13 @@ import {
 import {styles} from './style';
 import Loading from '../../../components/ModalLoading';
 import {useEffect, useState} from 'react';
-import {infoAddressById, updateAddressUser} from '../../../api/UserAPI';
-const UpdateAddress = ({route}) => {
+import {
+  infoAddressById,
+  updateAddressUser,
+  deleteAddress,
+} from '../../../api/UserAPI';
+import ModalView from '../../../components/Modal';
+const UpdateAddress = ({route, navigation}) => {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [city, setCity] = useState('');
@@ -21,13 +26,29 @@ const UpdateAddress = ({route}) => {
   const [street, setStreet] = useState('');
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
+  const [hide, setHide] = useState(false);
 
   const item = route.params.address || null;
-  console.log('id_address : ', item ? item : null);
+  const id_user = route.params.id_user || null;
+  // console.log('id_user : ', id_user ? id_user : null);
+  // console.log('id_address : ', item ? item : null);
   const validateFields = () => {
     let newErrors = {};
     if (!name.trim()) newErrors.name = 'Vui lòng nhập họ và tên';
-    if (!phone.trim()) newErrors.phone = 'Vui lòng nhập số điện thoại';
+    if (!phone.trim()) {
+      newErrors.phone = 'Vui lòng nhập số điện thoại';
+    } else {
+      const regexPhoneNumber = /^(0[3|5|7|8|9])[0-9]{8}$/;
+      if (!regexPhoneNumber.test(phone)) {
+        newErrors.phone = 'Số điện thoại không hợp lệ';
+      }
+    }
+
+    const existsPhone = item.numberphone.some(
+      phone => phone.numberphone === phone,
+    );
+    if (existsPhone) newErrors.phone = 'Số điện thoại đã được sử dụng';
+
     if (!city.trim()) newErrors.city = 'Vui lòng nhập tỉnh/thành phố';
     if (!district.trim()) newErrors.district = 'Vui lòng nhập quận/huyện';
     if (!ward.trim()) newErrors.ward = 'Vui lòng nhập phường/xã';
@@ -38,11 +59,14 @@ const UpdateAddress = ({route}) => {
   };
 
   const updateAddress = async () => {
+    if (!validateFields()) {
+      return;
+    }
     try {
       setLoading(true);
       const data = await updateAddressUser(
         item._id,
-        '67bd61f8a4f6cf15263bf20a',
+        id_user,
         street,
         district,
         ward,
@@ -57,24 +81,36 @@ const UpdateAddress = ({route}) => {
       setLoading(false);
     }
   };
+
+  const removeAddress = async () => {
+    try {
+      setLoading(true);
+      const response = await deleteAddress(id_user, item._id);
+      if (response) {
+        console.log('địa chỉ đã xóa : ', response);
+        setHide(false);
+        navigation.goBack();
+      }
+    } catch (error) {
+      console.log('có lỗi khi xóa địa chỉ : ', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     const fetchAddressInfo = async () => {
       try {
         setLoading(true);
         const addressInfoArray = await infoAddressById(item._id);
         console.log('id_address truyền vào : ', item._id);
-        console.log('data fe', addressInfoArray);
-        if (addressInfoArray.length > 0) {
-          const addressInfo = addressInfoArray[0];
-          setStreet(addressInfo.street);
-          setCity(addressInfo.city);
-          setDistrict(addressInfo.district);
-          setWard(addressInfo.ward);
-          setName(addressInfo.fullname);
-          setPhone(addressInfo.numberphone);
-        } else {
-          console.log('Không có dữ liệu địa chỉ.');
-        }
+        console.log(addressInfoArray);
+        setStreet(addressInfoArray[0].street);
+        setCity(addressInfoArray[0].city);
+        setDistrict(addressInfoArray[0].district);
+        setWard(addressInfoArray[0].ward);
+        setName(addressInfoArray[0].fullname);
+        setPhone(addressInfoArray[0].numberphone);
       } catch (error) {
         console.error('Có lỗi xảy ra khi lấy thông tin địa chỉ :', error);
       } finally {
@@ -84,7 +120,7 @@ const UpdateAddress = ({route}) => {
 
     fetchAddressInfo();
   }, [item._id]);
-  console.log(name);
+
   return (
     <ScrollView>
       <KeyboardAvoidingView
@@ -98,7 +134,10 @@ const UpdateAddress = ({route}) => {
               <TextInput
                 style={[styles.input, errors.name && styles.inputError]}
                 value={name}
-                onChangeText={setName}
+                onChangeText={text => {
+                  setName(text);
+                  setErrors(false);
+                }}
               />
 
               {errors.name && (
@@ -109,7 +148,11 @@ const UpdateAddress = ({route}) => {
               <TextInput
                 style={[styles.input, errors.phone && styles.inputError]}
                 value={phone}
-                onChangeText={setPhone}
+                onChangeText={text => {
+                  setPhone(text);
+                  setErrors(false);
+                }}
+                keyboardType="numeric"
               />
               {errors.phone && (
                 <Text style={styles.errorText}>{errors.phone}</Text>
@@ -121,7 +164,10 @@ const UpdateAddress = ({route}) => {
               <TextInput
                 style={[styles.input, errors.city && styles.inputError]}
                 value={city}
-                onChangeText={setCity}
+                onChangeText={text => {
+                  setCity(text);
+                  setErrors(false);
+                }}
               />
               {errors.city && (
                 <Text style={styles.errorText}>{errors.city}</Text>
@@ -133,7 +179,10 @@ const UpdateAddress = ({route}) => {
               <TextInput
                 style={[styles.input, errors.district && styles.inputError]}
                 value={district}
-                onChangeText={setDistrict}
+                onChangeText={text => {
+                  setDistrict(text);
+                  setErrors(false);
+                }}
               />
               {errors.district && (
                 <Text style={styles.errorText}>{errors.district}</Text>
@@ -145,7 +194,10 @@ const UpdateAddress = ({route}) => {
               <TextInput
                 style={[styles.input, errors.ward && styles.inputError]}
                 value={ward}
-                onChangeText={setWard}
+                onChangeText={text => {
+                  setWard(text);
+                  setErrors(false);
+                }}
               />
               {errors.ward && (
                 <Text style={styles.errorText}>{errors.ward}</Text>
@@ -156,7 +208,10 @@ const UpdateAddress = ({route}) => {
                 style={[styles.input, errors.street && styles.inputError]}
                 placeholder="Street name, Building, House number"
                 value={street}
-                onChangeText={setStreet}
+                onChangeText={text => {
+                  setStreet(text);
+                  setErrors(false);
+                }}
               />
               {errors.street && (
                 <Text style={styles.errorText}>{errors.street}</Text>
@@ -166,7 +221,9 @@ const UpdateAddress = ({route}) => {
             {/* Button Hoàn thành */}
             <View style={styles.containerButton}>
               <TouchableOpacity activeOpacity={0.9} style={{width: '48%'}}>
-                <Text style={styles.delete}>Delete address</Text>
+                <Text style={styles.delete} onPress={() => setHide(true)}>
+                  Delete address
+                </Text>
               </TouchableOpacity>
               <TouchableOpacity
                 activeOpacity={0.9}
@@ -176,6 +233,12 @@ const UpdateAddress = ({route}) => {
               </TouchableOpacity>
               <Loading loading={loading} />
             </View>
+            <ModalView
+              visible={hide}
+              onClose={() => setHide(false)}
+              onConfirm={removeAddress}
+              title="Xóa địa chỉ"
+              content="Bạn có muốn xóa địa chỉ này ra khỏi danh sách không?"></ModalView>
           </View>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>

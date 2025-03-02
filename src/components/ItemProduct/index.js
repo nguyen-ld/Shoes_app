@@ -14,10 +14,10 @@ import {
   getListFavourite,
   removeFavourite,
 } from '../../api/FavouriteAPI';
-const ItemProducts = ({item}) => {
+const ItemProducts = ({item, id_user}) => {
   const navigation = useNavigation();
   const [heart, setHeart] = useState(false);
-
+  console.log('item product id_user : ', id_user);
   useEffect(() => {
     const fetchFavourites = async () => {
       const favourites = await getListFavourite();
@@ -27,7 +27,7 @@ const ItemProducts = ({item}) => {
       setHeart(isFavourite);
     };
     fetchFavourites();
-  }, []);
+  }, [item]);
 
   const toggleFavourite = async () => {
     if (!heart) {
@@ -72,7 +72,10 @@ const ItemProducts = ({item}) => {
           style={style.buttonAdd}
           onPress={() => {
             console.log(item._id); // In ra ID sản phẩm
-            navigation.navigate('DetailsProduct', {id_product: item._id});
+            navigation.navigate('DetailsProduct', {
+              id_product: item._id,
+              id: id_user,
+            });
           }}>
           <Image
             source={require('../../assets/icon_add.png')}

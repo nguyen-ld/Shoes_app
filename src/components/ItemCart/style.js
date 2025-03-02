@@ -4,7 +4,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    gap: 15,
+    gap: 10,
   },
   imagesCart: {
     width: 120,

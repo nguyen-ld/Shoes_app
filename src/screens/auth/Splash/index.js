@@ -6,7 +6,7 @@ const SplashScreens = ({navigation}) => {
     <View style={styleSplashScreen.container}>
       <Image
         resizeMode="center"
-        source={require('../../../assets/welcomeImage.png')}
+        source={require('../../../assets/welcom.png')}
         style={styleSplashScreen.imgSplash}
       />
       <View style={styleSplashScreen.containerTitle}>
@@ -18,17 +18,11 @@ const SplashScreens = ({navigation}) => {
           Explore all product models to choose the product you like
         </Text>
       </View>
-      <View style={styleSplashScreen.containerButton}>
-        <Button
-          onPress={() => navigation.navigate('login')}
-          title="Login"></Button>
-
-        <Pressable
-          style={styleSplashScreen.containerSignup}
-          onPress={() => navigation.navigate('register')}>
-          <Text style={styleSplashScreen.titleSignUp}>Rigister</Text>
-        </Pressable>
-      </View>
+      <Pressable
+        style={styleSplashScreen.containerSignup}
+        onPress={() => navigation.navigate('login')}>
+        <Text style={styleSplashScreen.titleSignUp}>Get Started</Text>
+      </Pressable>
     </View>
   );
 };

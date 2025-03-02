@@ -2,7 +2,7 @@ import {Image, Modal, TouchableOpacity, View, Text} from 'react-native';
 import {styles} from './style';
 import {useEffect, useState} from 'react';
 
-const ModalView = ({visible, onClose, onConfirm}) => {
+const ModalView = ({visible, onClose, onConfirm, title, content}) => {
   const [showModal, setShowModal] = useState(visible);
 
   useEffect(() => {
@@ -17,10 +17,8 @@ const ModalView = ({visible, onClose, onConfirm}) => {
             <Image source={require('../../assets/close.png')} />
           </TouchableOpacity>
 
-          <Text style={styles.title}>Xóa sản phẩm</Text>
-          <Text style={styles.message}>
-            Bạn có muốn xóa sản phẩm này ra khỏi giỏ hàng không?
-          </Text>
+          <Text style={styles.title}>{title}</Text>
+          <Text style={[styles.message, {color: ' '}]}>{content}</Text>
 
           <TouchableOpacity style={styles.containerEvent} onPress={onConfirm}>
             <Text style={styles.content}>Đồng ý</Text>

@@ -136,7 +136,9 @@ const Cart = ({navigation, route, id_user}) => {
         <View style={styles.containerCheckout}>
           <TouchableOpacity
             style={styles.selectAddress}
-            onPress={() => navigation.navigate('SelectAddress')}>
+            onPress={() =>
+              navigation.navigate('SelectAddress', {id_user: id_user})
+            }>
             <Text style={styles.address}>Select delivery address</Text>
             <Image source={require('../../../assets/right.png')} />
           </TouchableOpacity>

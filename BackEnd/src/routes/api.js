@@ -2,62 +2,63 @@ const express = require('express');
 const router = express.Router();
 //categories
 const {
-  addCategories,
-  getListCategories,
+    addCategories,
+    getListCategories,
 } = require('../controllers/CategoriesControllers');
 // size
 const {
-  addSize,
-  getListSizeProduct,
+    addSize,
+    getListSizeProduct,
 } = require('../controllers/SizeControlllers');
 // product
 const {
-  addProduct,
-  getListProductByCategories,
-  getInfoProductById,
+    addProduct,
+    getListProductByCategories,
+    getInfoProductById,
 } = require('../controllers/ProductControllers');
 // gallery
 const {
-  addGalleryProduct,
-  getListGalleryByIdProduct,
+    addGalleryProduct,
+    getListGalleryByIdProduct,
 } = require('../controllers/GalleryProductControllers');
 // favourite
 const {
-  addFavourite,
-  getListFavourite,
-  removeFavourite,
+    addFavourite,
+    getListFavourite,
+    removeFavourite,
 } = require('../controllers/FavouriteControllers');
 
 // cart
 const {
-  addToCart,
-  getListCartByIdUser,
-  removeItemCart,
-  updateQuantity,
+    addToCart,
+    getListCartByIdUser,
+    removeItemCart,
+    updateQuantity,
 } = require('../controllers/CartControllers');
 
 //order
 const {
-  addOrder,
-  getListOrder,
+    addOrder,
+    getListOrder,
 } = require('../controllers/OrderItemsControllers');
 //upload
 const upload = require('../middleware/uploads');
 // user
 const {
-  addUser,
-  addAddress,
-  deleteAddress,
-  updateAddress,
-  getListAddressByUser,
-  getInfoUser,
-  updateInfo,
-  infoAddressByUser,
-  Login,
-  register,
+    addUser,
+    addAddress,
+    deleteAddress,
+    updateAddress,
+    getListAddressByUser,
+    getInfoUser,
+    updateInfo,
+    infoAddressByUser,
+    Login,
+    register,
+    changePassword,
 } = require('../controllers/UserControllers');
 router.get('/test', (req, res) => {
-  res.json({message: 'API is working!'});
+    res.json({message: 'API is working!'});
 });
 // api categories
 router.post('/addCategories', upload.single('images'), addCategories);
@@ -95,4 +96,5 @@ router.patch('/updateInfo/:id_user', updateInfo);
 router.get('/infoAddressByUser/:id_address', infoAddressByUser);
 router.post('/login', Login);
 router.post('/register', register);
+router.patch('/changePassword/:id_user', changePassword);
 module.exports = router;

@@ -6,18 +6,19 @@ import AddressView from '../../../components/ItemAddress';
 import {useFocusEffect} from '@react-navigation/native';
 import {ListAddressByUser} from '../../../api/UserAPI';
 
-const AddressEdit = ({navigation, id_user}) => {
+const AddressEdit = ({navigation, route}) => {
   const [address, setAddress] = useState([]);
-
+  const {id} = route.params || null;
+  console.log('id profile => address : ', id);
   useFocusEffect(
     useCallback(() => {
-      ListAddressByUser(id_user)
+      ListAddressByUser(id)
         .then(setAddress)
         .catch(error => console.error('Lỗi khi tải địa chỉ :', error));
     }, []),
   );
   const handlerUpdate = item => {
-    navigation.navigate('UpdateAddress', {address: item});
+    navigation.navigate('UpdateAddress', {address: item, id_user: id});
     console.log('item parent : ', address);
   };
   return (
@@ -37,21 +38,27 @@ const AddressEdit = ({navigation, id_user}) => {
         />
       ) : (
         <View>
+          <View style={{alignItems: 'center', marginTop: 10}}>
+            <Image
+              source={require('../../../assets/not_found_address.png')}
+              style={{width: 280, height: 280}}
+            />
+          </View>
           <Text
             style={{
               fontFamily: 'Poppins-Medium',
               fontSize: 16,
               textAlign: 'center',
-              color: 'red',
               marginVertical: 20,
+              marginHorizontal: 60,
             }}>
-            User has no address
+            The current user does not have an address !!!
           </Text>
         </View>
       )}
       <TouchableOpacity
         style={styles.containerAdd}
-        onPress={() => navigation.navigate('EditAddress')}>
+        onPress={() => navigation.navigate('EditAddress', {id: id})}>
         <Image source={require('../../../assets/add.png')} />
         <Text style={styles.textAddress}>Add new address</Text>
       </TouchableOpacity>

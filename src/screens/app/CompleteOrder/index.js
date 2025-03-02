@@ -31,7 +31,7 @@ const CompleteView = ({id_user}) => {
           />
 
           <Text style={styles.textEmpty}>
-            Bạn không có đơn đặt hàng nào hoàn thành vào thời điểm này !
+            You have no active orders at this time!
           </Text>
         </View>
       ) : (

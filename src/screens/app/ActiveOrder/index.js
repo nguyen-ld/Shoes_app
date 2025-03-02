@@ -32,7 +32,7 @@ const ActiveView = ({id_user}) => {
           />
 
           <Text style={styles.textEmpty}>
-            Bạn không có đơn đặt hàng nào hoạt động vào thời điểm này !
+            You have no active orders at this time!
           </Text>
         </View>
       ) : (
