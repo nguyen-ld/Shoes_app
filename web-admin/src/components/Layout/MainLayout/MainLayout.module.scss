@@ -1,0 +1,15 @@
+.container {
+	display: flex;
+	justify-content: space-between;
+	flex: 1;
+	.side-bar {
+		width: 18%;
+		position: fixed;
+		height: 100%;
+	}
+	.container-body {
+		width: 82%;
+		padding-left: 18%;
+		height: 100%;
+	}
+}

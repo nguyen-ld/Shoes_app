@@ -10,9 +10,11 @@ import Loading from '../../../components/ModalLoading';
 
 const Register = ({navigation}) => {
     const [username, setUsername] = useState(null);
+    const [email, setEmail] = useState(null);
     const [password, setPassword] = useState(null);
     const [confirmPassword, setConfirmPassword] = useState(null);
     const [useNameError, setUserNameError] = useState(false);
+    const [emailError, setEmailError] = useState(false);
     const [passwordError, setPasswordError] = useState(false);
     const [confirmPasswordError, setConfirmPasswordError] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -21,6 +23,13 @@ const Register = ({navigation}) => {
         const specialCharsPattern = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>?/]/;
         return specialCharsPattern.test(password);
     };
+
+    const handleEmail = email => {
+        const emailRegex =
+            /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+        return emailRegex.test(email);
+    };
+
     const validateForm = () => {
         let valid = true;
 
@@ -28,10 +37,20 @@ const Register = ({navigation}) => {
         if (username === null) {
             setUserNameError('Vui lòng nhập tên đăng nhập');
             valid = false;
+        } else if (!handleEmail(email)) {
+            setEmailError('Email không hợp lệ');
+            valid = false;
         } else {
             setUserNameError(false);
         }
 
+        // check email
+        if (email === null) {
+            setUserNameError('Vui lòng nhập email');
+            valid = false;
+        } else {
+            setUserNameError(false);
+        }
         // Kiểm tra mật khẩu
         if (password === null) {
             setPasswordError('Vui lòng nhập mật khẩu');
@@ -107,9 +126,21 @@ const Register = ({navigation}) => {
                     }}
                     error={useNameError}
                 />
-                {useNameError && (
-                    <Text style={{color: 'red'}}>{useNameError}</Text>
-                )}
+                <Input
+                    label="Email*"
+                    value={email}
+                    onChangeText={text => {
+                        setEmail(text);
+                        if (text) {
+                            setEmailError(false);
+                        }
+                    }}
+                    onBlur={() => {
+                        if (!email) setEmailError(true);
+                    }}
+                    error={email}
+                />
+                {emailError && <Text style={{color: 'red'}}>{emailError}</Text>}
                 <Input
                     label="Password* "
                     password

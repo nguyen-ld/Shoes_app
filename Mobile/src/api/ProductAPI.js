@@ -2,6 +2,7 @@ import axios from 'axios';
 
 import {API_BASE_URL, DEFAULT_HEADERS} from '../config/apiConfig';
 import {Products} from '../models/Products';
+import jwt_interceptor from './JWT_Interceptor';
 
 const api = axios.create({
     baseURL: API_BASE_URL,
@@ -11,7 +12,9 @@ export const getListProductById = async id_categories => {
     try {
         if (!id_categories) return [];
 
-        const response = await api.get(`/getListProduct/${id_categories}`);
+        const response = await jwt_interceptor.get(
+            `/getListProduct/${id_categories}`,
+        );
         if (response.status === 200) {
             return response.data.data.map(
                 item =>
@@ -26,7 +29,7 @@ export const getListProductById = async id_categories => {
             );
         }
     } catch (error) {
-        console.error('Lỗi API:', error);
+        console.log(error);
         return [];
     }
 };

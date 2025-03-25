@@ -45,7 +45,6 @@ const {
 const upload = require("../middleware/uploads");
 // user
 const {
-	addUser,
 	addAddress,
 	deleteAddress,
 	updateAddress,
@@ -62,12 +61,20 @@ const {
 //middleware
 const { verifyToken } = require("../middleware/auth");
 
+// otp
+const {
+	sendOTP,
+	verifyOTP,
+} = require("../controllers/ResetPasswordControllers");
+
 // api categories
 router.post("/addCategories", upload.single("images"), addCategories);
 router.get("/getListCategories", getListCategories);
+
 //api size
 router.post("/addSize", addSize);
 router.get("/getListSizeProduct", getListSizeProduct);
+
 //api product
 router.post("/addProduct", upload.single("images"), addProduct);
 router.get(
@@ -76,23 +83,27 @@ router.get(
 	getListProductByCategories
 );
 router.get("/getInfoProductById/:id_product", getInfoProductById);
+
 // api favoutite
 router.post("/addFavourite", addFavourite);
 router.get("/getListFavourite", getListFavourite);
 router.delete("/removeFavourite/:id_product", removeFavourite);
+
 //api gallery product
 router.post("/addGalleryProduct", upload.single("images"), addGalleryProduct);
 router.get("/getListImagesGallery/:id_product", getListGalleryByIdProduct);
+
 //api cart
 router.post("/addToCart", upload.single("images"), addToCart);
 router.get("/getListCart/:id_user", getListCartByIdUser);
 router.delete("/removeItem/:id_product", removeItemCart);
 router.post("/updateQuantity", updateQuantity);
+
 //api order
 router.post("/addOrder", addOrder);
 router.get("/getListOrder/:id_user/status/:status", getListOrder);
+
 //api user
-router.post("/addUser", addUser);
 router.patch("/addAddress/:_id", addAddress);
 router.delete("/users/:id_user/address/:id_address", deleteAddress);
 router.patch("/updateAddress/:id_user/address/:id_address", updateAddress);
@@ -104,4 +115,8 @@ router.post("/login", Login);
 router.post("/register", register);
 router.patch("/changePassword/:id_user", changePassword);
 router.post("/refresh", requestRefreshToken);
+
+//api otp
+router.post("/sendOTP", sendOTP);
+router.post("/verifyOTP", verifyOTP);
 module.exports = router;

@@ -4,12 +4,15 @@ import {useState, useCallback} from 'react';
 import {useFocusEffect} from '@react-navigation/native';
 import {listOrderByUser} from '../../../api/OrderAPI';
 import OrderView from '../../../items/ItemOrder';
-const CompleteView = ({id_user}) => {
+import {context} from '../../../context/contextAPI';
+import {useContext} from 'react';
+const CompleteView = () => {
     const [order, setOrder] = useState([]);
+    const {userId} = useContext(context);
 
     const listOrder = async () => {
         try {
-            const data = await listOrderByUser(id_user, 'Hoàn thành');
+            const data = await listOrderByUser(userId, 'Hoàn thành');
             console.log('order list : ', data);
             setOrder(data);
         } catch (error) {

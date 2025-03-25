@@ -3,39 +3,6 @@ const modelRefreshToken = require("../model/token");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-const addUser = async (req, res) => {
-	try {
-		const { username, password } = req.body;
-		const model = new modelUser(req.body);
-		if (!(password.length >= 8 && password.length <= 16)) {
-			res.json({
-				status: 400,
-				message: "Mật khẩu phải có độ dài tối đa từ 8 đến 16 kí tự ",
-			});
-		}
-		model.password = await bcrypt.hash(password, 10);
-		const result = await model.save();
-		if (result) {
-			res.json({
-				status: 200,
-				message: "Thêm user thành công",
-				data: result,
-			});
-		} else {
-			res.json({
-				status: 404,
-				message: "Thêm user thất bại ",
-				data: "",
-			});
-		}
-	} catch (error) {
-		console.log(error);
-		res.json({
-			status: 500,
-			message: error.message,
-		});
-	}
-};
 const addAddress = async (req, res) => {
 	try {
 		const { _id } = req.params;
@@ -421,7 +388,7 @@ const requestRefreshToken = async (req, res) => {
 		if (!checkRefreshToken) {
 			return res
 				.status(403)
-				.json({ message: "RefreshToken hết hạn hoặc không hợp lệ" });
+				.json({ message: "RefreshToken không tồn tại" });
 		}
 
 		jwt.verify(
@@ -437,13 +404,13 @@ const requestRefreshToken = async (req, res) => {
 				const newAccessToken = jwt.sign(
 					{ id: user.id, username: user.username },
 					process.env.SECRET_KEY,
-					{ expiresIn: "1d" }
+					{ expiresIn: "30s" }
 				);
 
 				const newRefreshToken = jwt.sign(
 					{ id: user.id, username: user.username },
 					process.env.JWT_REFRESH_SECRET_KEY,
-					{ expiresIn: "60d" }
+					{ expiresIn: "40s" }
 				);
 
 				await modelRefreshToken.findOneAndUpdate(
@@ -459,7 +426,10 @@ const requestRefreshToken = async (req, res) => {
 					sameSite: "strict",
 				});
 
-				res.status(200).json({ accessToken: newAccessToken });
+				res.status(200).json({
+					status: 200,
+					accessToken: newAccessToken,
+				});
 			}
 		);
 	} catch (error) {
@@ -470,7 +440,7 @@ const requestRefreshToken = async (req, res) => {
 
 const register = async (req, res) => {
 	try {
-		const { username, password, confirmPassword } = req.body;
+		const { username, email, password, confirmPassword } = req.body;
 		const checkExistUser = await modelUser.find();
 
 		const existing = checkExistUser.find((user) => {
@@ -482,6 +452,28 @@ const register = async (req, res) => {
 				message: "username đã tồn tại ",
 			});
 		}
+
+		const checkExistingEmail = checkExistUser.find((user) => {
+			return user.email === email;
+		});
+
+		if (checkExistingEmail) {
+			return res.status(400).json({
+				status: 400,
+				message: "email đã tồn tại ",
+			});
+		}
+
+		const validEmail =
+			/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+
+		if (!validEmail.test(email)) {
+			return res.status(400).json({
+				status: 400,
+				message: "email không hợp lệ ",
+			});
+		}
+
 		if (!(password.length >= 8 && password.length <= 16)) {
 			return res.json({
 				status: 400,
@@ -502,7 +494,7 @@ const register = async (req, res) => {
 			res.json({
 				status: 200,
 				message: "Tạo tài khoản thành công ",
-				data: { username, password },
+				data: { username, email },
 			});
 		} else {
 			res.json({
@@ -608,7 +600,6 @@ const changePassword = async (req, res) => {
 };
 
 module.exports = {
-	addUser,
 	addAddress,
 	deleteAddress,
 	updateAddress,

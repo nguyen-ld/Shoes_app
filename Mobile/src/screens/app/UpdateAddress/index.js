@@ -35,8 +35,7 @@ const UpdateAddress = ({route, navigation}) => {
 
     const item = route.params.address || null;
     const id_user = route.params.id_user || null;
-    // console.log('id_user : ', id_user ? id_user : null);
-    // console.log('id_address : ', item ? item : null);
+
     const validateFields = () => {
         let newErrors = true;
 

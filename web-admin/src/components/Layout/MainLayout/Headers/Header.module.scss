@@ -1,0 +1,30 @@
+.container {
+	padding: 15px 30px;
+	transition: all 0.3s ease-in-out;
+}
+
+.logout {
+	p {
+		margin: 0;
+		text-align: right;
+		font-weight: 500;
+	}
+	.icon-logo-logout {
+		padding-left: 10px;
+	}
+	&:hover {
+		cursor: pointer;
+		color: #007bff;
+	}
+}
+
+@keyframes fadeInDown {
+	from {
+		opacity: 0;
+		transform: translateY(-10px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}

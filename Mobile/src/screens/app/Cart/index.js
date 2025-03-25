@@ -8,12 +8,14 @@ import {useFocusEffect} from '@react-navigation/native';
 import Loading from '../../../components/ModalLoading';
 import {addOrder} from '../../../api/OrderAPI';
 import ModalOrderSuccess from '../../../components/ModalOrderSuccess';
+import {context} from '../../../context/contextAPI';
+import {useContext} from 'react';
 
-const Cart = ({navigation, route, id_user}) => {
+const Cart = ({navigation, route}) => {
     const id_address = route.params?.id_address || null;
-    console.log('id ở cart : ', id_address ? id_address._id : null);
-    console.log('cart screen : ', id_address ? id_address : null);
-    console.log('id nhận từ tabs : ', id_user);
+
+    const {userId} = useContext(context);
+
     const [cart, setCart] = useState([]);
     const [total, setTotal] = useState(0);
     const [selectedItems, setSelectedItems] = useState([]);
@@ -52,7 +54,7 @@ const Cart = ({navigation, route, id_user}) => {
     const ListCart = async () => {
         try {
             setLoading(true);
-            const data = await getListCartByUser(id_user);
+            const data = await getListCartByUser(userId);
             console.log('data list : ', data);
             setCart(data);
             caculator(data);
@@ -80,10 +82,10 @@ const Cart = ({navigation, route, id_user}) => {
 
         console.log('Selected Items:', selectedItems);
         console.log('ID Address:', id_address._id);
-        console.log('data gửi lên : ', id_user, id_address._id, selectedItems);
+        console.log('data gửi lên : ', userId, id_address._id, selectedItems);
         try {
             setLoading(true);
-            const data = await addOrder(id_user, selectedItems, id_address._id);
+            const data = await addOrder(userId, selectedItems, id_address._id);
 
             if (data) {
                 setHide(true);
@@ -143,7 +145,7 @@ const Cart = ({navigation, route, id_user}) => {
                         style={styles.selectAddress}
                         onPress={() =>
                             navigation.navigate('SelectAddress', {
-                                id_user: id_user,
+                                id_user: userId,
                             })
                         }>
                         <Text style={styles.address}>

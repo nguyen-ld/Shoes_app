@@ -9,11 +9,11 @@ const verifyToken = (req, res, next) => {
 	if (!token) {
 		return res.status(403).json({ message: "Token không hợp lệ" });
 	}
-	jwt.verify(token, process.env.SECRET_KEY, (err, decoded) => {
-		if (err) {
+	jwt.verify(token, process.env.SECRET_KEY, (error, decoded) => {
+		if (error) {
 			return res.status(401).json({
 				status: 401,
-				message: "Token hết hạn hoặc không hợp lệ",
+				message: "Token hết hạn",
 			});
 		}
 		req.user = decoded;

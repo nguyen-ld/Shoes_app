@@ -5,12 +5,15 @@ import {FlatList} from 'react-native-gesture-handler';
 import {listOrderByUser} from '../../../api/OrderAPI';
 import {useFocusEffect} from '@react-navigation/native';
 import OrderView from '../../../items/ItemOrder';
-const ActiveView = ({id_user}) => {
+import {context} from '../../../context/contextAPI';
+import {useContext} from 'react';
+const ActiveView = () => {
     const [order, setOrder] = useState([]);
+    const {userId} = useContext(context);
 
     const listOrder = async () => {
         try {
-            const data = await listOrderByUser(id_user, 'Đang xử lý');
+            const data = await listOrderByUser(userId, 'Đang xử lý');
             console.log('order list : ', data);
             setOrder(data);
         } catch (error) {

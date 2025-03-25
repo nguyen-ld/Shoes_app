@@ -17,6 +17,7 @@ import EditAddress from './src/screens/app/EditAddress';
 import SelectAddress from './src/screens/app/SelectAddress';
 import UpdateAddress from './src/screens/app/UpdateAddress';
 import UserProvider from './src/context/contextAPI';
+import ForgotPasword from './src/screens/auth/ForgotPassword';
 
 const Stack = createStackNavigator();
 
@@ -90,6 +91,11 @@ const App = () => {
                         name="UpdateAddress"
                         component={UpdateAddress}
                         options={{title: 'Edit address'}}
+                    />
+                    <Stack.Screen
+                        name="ForgotPassword"
+                        component={ForgotPasword}
+                        options={{title: ''}}
                     />
                 </Stack.Navigator>
             </NavigationContainer>

@@ -5,6 +5,7 @@ import {
     KeyboardAvoidingView,
     TouchableWithoutFeedback,
     Keyboard,
+    TouchableOpacity,
 } from 'react-native';
 import {styleLogin} from './style';
 import Input from '../../../components/Input';
@@ -38,7 +39,6 @@ const Login = ({navigation}) => {
             try {
                 const savedUsername = await AsyncStorage.getItem('username');
                 const savedPassword = await AsyncStorage.getItem('password');
-                console.log('Dữ liệu lấy được:', savedUsername, savedPassword);
                 if (savedUsername !== null && savedPassword !== null) {
                     setUsername(savedUsername);
                     setPassword(savedPassword);
@@ -170,9 +170,15 @@ const Login = ({navigation}) => {
                             </Text>
                         </View>
                         <View>
-                            <Text style={styleLogin.forgot}>
-                                Forgot your password?
-                            </Text>
+                            <TouchableOpacity
+                                activeOpacity={1}
+                                onPress={() =>
+                                    navigation.navigate('ForgotPassword')
+                                }>
+                                <Text style={styleLogin.forgot}>
+                                    Forgot your password?
+                                </Text>
+                            </TouchableOpacity>
                         </View>
                     </View>
                     <Button title="Login" onPress={LoginApp}></Button>

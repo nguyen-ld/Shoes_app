@@ -1,0 +1,65 @@
+.headers {
+	p {
+		font-size: 16px;
+		font-weight: 600;
+		margin: 0;
+		background-color: #f7f7f7;
+		padding: 10px 20px;
+	}
+	.dropdown-container {
+		margin: 10px 0;
+		padding: 0 20px;
+		.custom-select {
+			width: 280px;
+			height: 30px;
+			outline: none;
+			border: 1px solid #bdbdbd;
+			box-sizing: border-box;
+			padding: 5px;
+			border-radius: 0;
+		}
+	}
+}
+
+.content {
+	margin-top: 10px;
+	padding: 20px;
+	.title-table {
+		background: var(--bg-table);
+	}
+	table {
+		width: 100%;
+		border-collapse: collapse;
+	}
+
+	th {
+		padding: 10px 0;
+	}
+}
+.item-info {
+	td {
+		padding: 10px;
+		text-align: center;
+	}
+}
+.container-action {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 10px;
+	.icon-update {
+		color: #379e90;
+		background-color: #daf4f1;
+		padding: 10px 15px;
+		font-size: 16px;
+	}
+	.icon-remove {
+		color: #d78c8b;
+		background-color: #feebea;
+		padding: 10px 15px;
+		font-size: 16px;
+	}
+}
+.container-items tr:nth-child(odd) {
+	background-color: #f6f7f9;
+}

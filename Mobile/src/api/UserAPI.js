@@ -105,7 +105,7 @@ export const updateAddressUser = async (
     username,
 ) => {
     try {
-        console.log('📤 Dữ liệu gửi đi:', {
+        console.log('Dữ liệu gửi đi:', {
             id_address,
             id_user,
             street,
@@ -124,14 +124,14 @@ export const updateAddressUser = async (
         console.log('📥 API Response:', response.data);
 
         if (response.data.status === 200) {
-            console.log('✅ Update địa chỉ thành công:', response.data.data);
+            console.log('Update địa chỉ thành công:', response.data.data);
             Alert.alert(
                 'Sửa địa chỉ',
                 'Chỉnh sửa thông tin địa chỉ của người dùng thành công',
             );
             return response.data.data;
         } else {
-            console.log('❌ Update địa chỉ thất bại:', response.data.message);
+            console.log('Update địa chỉ thất bại:', response.data.message);
             return response.data.message;
         }
     } catch (error) {
@@ -233,12 +233,18 @@ export const LoginApplication = async (username, password, rememberMe) => {
     }
 };
 
-export const RegisterAccount = async (username, password, confirmPassword) => {
+export const RegisterAccount = async (
+    username,
+    password,
+    email,
+    confirmPassword,
+) => {
     try {
         const response = await api.post('/register', {
             username,
             password,
             confirmPassword,
+            email,
         });
         if (response.data.status === 200) {
             console.log('register thành công ');
